@@ -10,16 +10,24 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+
 public class OrderShipmentUseCaseTest {
     private final TestOrderRepository orderRepository = new TestOrderRepository();
     private final TestShipmentService shipmentService = new TestShipmentService();
     private final OrderShipmentUseCase useCase = new OrderShipmentUseCase(orderRepository, shipmentService);
 
     @Test
-    public void shipApprovedOrder() throws Exception {
-        Order initialOrder = new Order();
-        initialOrder.setId(1);
-        initialOrder.setStatus(OrderStatus.APPROVED);
+    public void shipApprovedOrder() {
+        Order initialOrder = new Order(
+                new BigDecimal("0.00"),
+                "EUR",
+                new ArrayList<>(),
+                new BigDecimal("0.00"),
+                OrderStatus.APPROVED,
+                1
+        );
         orderRepository.addOrder(initialOrder);
 
         OrderShipmentRequest request = new OrderShipmentRequest();
@@ -32,10 +40,15 @@ public class OrderShipmentUseCaseTest {
     }
 
     @Test
-    public void createdOrdersCannotBeShipped() throws Exception {
-        Order initialOrder = new Order();
-        initialOrder.setId(1);
-        initialOrder.setStatus(OrderStatus.CREATED);
+    public void createdOrdersCannotBeShipped() {
+        Order initialOrder = new Order(
+                new BigDecimal("0.00"),
+                "EUR",
+                new ArrayList<>(),
+                new BigDecimal("0.00"),
+                OrderStatus.CREATED,
+                1
+        );
         orderRepository.addOrder(initialOrder);
 
         OrderShipmentRequest request = new OrderShipmentRequest();
@@ -48,10 +61,15 @@ public class OrderShipmentUseCaseTest {
     }
 
     @Test
-    public void rejectedOrdersCannotBeShipped() throws Exception {
-        Order initialOrder = new Order();
-        initialOrder.setId(1);
-        initialOrder.setStatus(OrderStatus.REJECTED);
+    public void rejectedOrdersCannotBeShipped() {
+        Order initialOrder = new Order(
+                new BigDecimal("0.00"),
+                "EUR",
+                new ArrayList<>(),
+                new BigDecimal("0.00"),
+                OrderStatus.REJECTED,
+                1
+        );
         orderRepository.addOrder(initialOrder);
 
         OrderShipmentRequest request = new OrderShipmentRequest();
@@ -63,10 +81,15 @@ public class OrderShipmentUseCaseTest {
     }
 
     @Test
-    public void shippedOrdersCannotBeShippedAgain() throws Exception {
-        Order initialOrder = new Order();
-        initialOrder.setId(1);
-        initialOrder.setStatus(OrderStatus.SHIPPED);
+    public void shippedOrdersCannotBeShippedAgain() {
+        Order initialOrder = new Order(
+                new BigDecimal("0.00"),
+                "EUR",
+                new ArrayList<>(),
+                new BigDecimal("0.00"),
+                OrderStatus.SHIPPED,
+                1
+        );
         orderRepository.addOrder(initialOrder);
 
         OrderShipmentRequest request = new OrderShipmentRequest();

@@ -5,11 +5,20 @@ import java.util.List;
 
 public class Order {
     private BigDecimal total;
-    private String currency;
-    private List<OrderItem> items;
+    private final String currency;
+    private final List<OrderItem> items;
     private BigDecimal tax;
     private OrderStatus status;
-    private int id;
+    private final int id;
+
+    public Order(BigDecimal total, String currency, List<OrderItem> items, BigDecimal tax, OrderStatus status, int id) {
+        this.total = total;
+        this.currency = currency;
+        this.items = items;
+        this.tax = tax;
+        this.status = status;
+        this.id = id;
+    }
 
     public BigDecimal getTotal() {
         return total;
@@ -23,16 +32,8 @@ public class Order {
         return currency;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
     public List<OrderItem> getItems() {
         return items;
-    }
-
-    public void setItems(List<OrderItem> items) {
-        this.items = items;
     }
 
     public BigDecimal getTax() {
@@ -53,9 +54,5 @@ public class Order {
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }

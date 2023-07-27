@@ -9,15 +9,23 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+
 public class OrderApprovalUseCaseTest {
     private final TestOrderRepository orderRepository = new TestOrderRepository();
     private final OrderApprovalUseCase useCase = new OrderApprovalUseCase(orderRepository);
 
     @Test
-    public void approvedExistingOrder() throws Exception {
-        Order initialOrder = new Order();
-        initialOrder.setStatus(OrderStatus.CREATED);
-        initialOrder.setId(1);
+    public void approvedExistingOrder() {
+        Order initialOrder = new Order(
+                new BigDecimal("0.00"),
+                "EUR",
+                new ArrayList<>(),
+                new BigDecimal("0.00"),
+                OrderStatus.CREATED,
+                1
+        );
         orderRepository.addOrder(initialOrder);
 
         OrderApprovalRequest request = new OrderApprovalRequest();
@@ -31,10 +39,15 @@ public class OrderApprovalUseCaseTest {
     }
 
     @Test
-    public void rejectedExistingOrder() throws Exception {
-        Order initialOrder = new Order();
-        initialOrder.setStatus(OrderStatus.CREATED);
-        initialOrder.setId(1);
+    public void rejectedExistingOrder() {
+        Order initialOrder = new Order(
+                new BigDecimal("0.00"),
+                "EUR",
+                new ArrayList<>(),
+                new BigDecimal("0.00"),
+                OrderStatus.CREATED,
+                1
+        );
         orderRepository.addOrder(initialOrder);
 
         OrderApprovalRequest request = new OrderApprovalRequest();
@@ -48,10 +61,15 @@ public class OrderApprovalUseCaseTest {
     }
 
     @Test
-    public void cannotApproveRejectedOrder() throws Exception {
-        Order initialOrder = new Order();
-        initialOrder.setStatus(OrderStatus.REJECTED);
-        initialOrder.setId(1);
+    public void cannotApproveRejectedOrder() {
+        Order initialOrder = new Order(
+                new BigDecimal("0.00"),
+                "EUR",
+                new ArrayList<>(),
+                new BigDecimal("0.00"),
+                OrderStatus.REJECTED,
+                1
+        );
         orderRepository.addOrder(initialOrder);
 
         OrderApprovalRequest request = new OrderApprovalRequest();
@@ -63,25 +81,35 @@ public class OrderApprovalUseCaseTest {
     }
 
     @Test
-    public void cannotRejectApprovedOrder() throws Exception {
-        Order initialOrder = new Order();
-        initialOrder.setStatus(OrderStatus.APPROVED);
-        initialOrder.setId(1);
+    public void cannotRejectApprovedOrder() {
+        Order initialOrder = new Order(
+                new BigDecimal("0.00"),
+                "EUR",
+                new ArrayList<>(),
+                new BigDecimal("0.00"),
+                OrderStatus.APPROVED,
+                1
+        );
         orderRepository.addOrder(initialOrder);
 
         OrderApprovalRequest request = new OrderApprovalRequest();
         request.setOrderId(1);
         request.setApproved(false);
-        
+
         assertThatThrownBy(() -> useCase.run(request)).isExactlyInstanceOf(ApprovedOrderCannotBeRejectedException.class);
         assertThat(orderRepository.getSavedOrder()).isNull();
     }
 
     @Test
-    public void shippedOrdersCannotBeApproved() throws Exception {
-        Order initialOrder = new Order();
-        initialOrder.setStatus(OrderStatus.SHIPPED);
-        initialOrder.setId(1);
+    public void shippedOrdersCannotBeApproved() {
+        Order initialOrder = new Order(
+                new BigDecimal("0.00"),
+                "EUR",
+                new ArrayList<>(),
+                new BigDecimal("0.00"),
+                OrderStatus.SHIPPED,
+                1
+        );
         orderRepository.addOrder(initialOrder);
 
         OrderApprovalRequest request = new OrderApprovalRequest();
@@ -93,10 +121,15 @@ public class OrderApprovalUseCaseTest {
     }
 
     @Test
-    public void shippedOrdersCannotBeRejected() throws Exception {
-        Order initialOrder = new Order();
-        initialOrder.setStatus(OrderStatus.SHIPPED);
-        initialOrder.setId(1);
+    public void shippedOrdersCannotBeRejected() {
+        Order initialOrder = new Order(
+                new BigDecimal("0.00"),
+                "EUR",
+                new ArrayList<>(),
+                new BigDecimal("0.00"),
+                OrderStatus.SHIPPED,
+                1
+        );
         orderRepository.addOrder(initialOrder);
 
         OrderApprovalRequest request = new OrderApprovalRequest();
