@@ -16,7 +16,11 @@ public class Product {
         this.category = category;
     }
 
-    public BigDecimal unitaryTax() {
+    public BigDecimal taxedAmount() {
+        return price.add(tax()).setScale(2, HALF_UP);
+    }
+
+    public BigDecimal tax() {
         return price.divide(valueOf(100)).multiply(category.getTaxPercentage()).setScale(2, HALF_UP);
     }
 
@@ -27,9 +31,4 @@ public class Product {
     public BigDecimal getPrice() {
         return price;
     }
-
-    public Category getCategory() {
-        return category;
-    }
-
 }
