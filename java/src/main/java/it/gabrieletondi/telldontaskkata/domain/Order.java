@@ -1,13 +1,16 @@
 package it.gabrieletondi.telldontaskkata.domain;
 
+import it.gabrieletondi.telldontaskkata.useCase.OrderCreationUseCase;
+
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
-    private BigDecimal total;
+    private final BigDecimal total;
     private final String currency;
     private final List<OrderItem> items;
-    private BigDecimal tax;
+    private final BigDecimal tax;
     private OrderStatus status;
     private final int id;
 
@@ -20,12 +23,22 @@ public class Order {
         this.id = id;
     }
 
-    public BigDecimal getTotal() {
-        return total;
+    public static Order create(ArrayList<OrderCreationUseCase.Truc> trucs, String currency, int id) {
+        List<OrderItem> items = trucs.stream().map(OrderCreationUseCase.Truc::items).toList();
+        BigDecimal total = trucs.stream().map(OrderCreationUseCase.Truc::taxedAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal tax = trucs.stream().map(OrderCreationUseCase.Truc::taxAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return new Order(
+                total,
+                currency,
+                items,
+                tax,
+                OrderStatus.CREATED,
+                id
+        );
     }
 
-    public void setTotal(BigDecimal total) {
-        this.total = total;
+    public BigDecimal getTotal() {
+        return total;
     }
 
     public String getCurrency() {
@@ -38,10 +51,6 @@ public class Order {
 
     public BigDecimal getTax() {
         return tax;
-    }
-
-    public void setTax(BigDecimal tax) {
-        this.tax = tax;
     }
 
     public OrderStatus getStatus() {
