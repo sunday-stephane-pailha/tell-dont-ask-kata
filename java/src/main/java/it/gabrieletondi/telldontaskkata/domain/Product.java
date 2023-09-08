@@ -2,6 +2,9 @@ package it.gabrieletondi.telldontaskkata.domain;
 
 import java.math.BigDecimal;
 
+import static java.math.BigDecimal.valueOf;
+import static java.math.RoundingMode.HALF_UP;
+
 public class Product {
     private final String name;
     private final BigDecimal price;
@@ -11,6 +14,10 @@ public class Product {
         this.name = name;
         this.price = price;
         this.category = category;
+    }
+
+    public BigDecimal unitaryTax() {
+        return price.divide(valueOf(100)).multiply(category.getTaxPercentage()).setScale(2, HALF_UP);
     }
 
     public String getName() {
