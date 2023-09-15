@@ -3,14 +3,12 @@ package it.gabrieletondi.telldontaskkata.useCase;
 import it.gabrieletondi.telldontaskkata.domain.Order;
 import it.gabrieletondi.telldontaskkata.domain.OrderStatus;
 import it.gabrieletondi.telldontaskkata.doubles.TestOrderRepository;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-import org.junit.jupiter.api.Test;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
 
 public class OrderApprovalUseCaseTest {
     private final TestOrderRepository orderRepository = new TestOrderRepository();
@@ -19,10 +17,8 @@ public class OrderApprovalUseCaseTest {
     @Test
     public void approvedExistingOrder() {
         Order initialOrder = new Order(
-                new BigDecimal("0.00"),
                 "EUR",
                 new ArrayList<>(),
-                new BigDecimal("0.00"),
                 OrderStatus.CREATED,
                 1
         );
@@ -41,10 +37,8 @@ public class OrderApprovalUseCaseTest {
     @Test
     public void rejectedExistingOrder() {
         Order initialOrder = new Order(
-                new BigDecimal("0.00"),
                 "EUR",
                 new ArrayList<>(),
-                new BigDecimal("0.00"),
                 OrderStatus.CREATED,
                 1
         );
@@ -63,10 +57,8 @@ public class OrderApprovalUseCaseTest {
     @Test
     public void cannotApproveRejectedOrder() {
         Order initialOrder = new Order(
-                new BigDecimal("0.00"),
                 "EUR",
                 new ArrayList<>(),
-                new BigDecimal("0.00"),
                 OrderStatus.REJECTED,
                 1
         );
@@ -83,10 +75,8 @@ public class OrderApprovalUseCaseTest {
     @Test
     public void cannotRejectApprovedOrder() {
         Order initialOrder = new Order(
-                new BigDecimal("0.00"),
                 "EUR",
                 new ArrayList<>(),
-                new BigDecimal("0.00"),
                 OrderStatus.APPROVED,
                 1
         );
@@ -103,10 +93,8 @@ public class OrderApprovalUseCaseTest {
     @Test
     public void shippedOrdersCannotBeApproved() {
         Order initialOrder = new Order(
-                new BigDecimal("0.00"),
                 "EUR",
                 new ArrayList<>(),
-                new BigDecimal("0.00"),
                 OrderStatus.SHIPPED,
                 1
         );
@@ -123,10 +111,8 @@ public class OrderApprovalUseCaseTest {
     @Test
     public void shippedOrdersCannotBeRejected() {
         Order initialOrder = new Order(
-                new BigDecimal("0.00"),
                 "EUR",
                 new ArrayList<>(),
-                new BigDecimal("0.00"),
                 OrderStatus.SHIPPED,
                 1
         );
