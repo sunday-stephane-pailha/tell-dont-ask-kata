@@ -9,8 +9,6 @@ import it.gabrieletondi.telldontaskkata.repository.ProductCatalog;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import static java.math.RoundingMode.HALF_UP;
-
 public class OrderCreationUseCase {
     private final OrderRepository orderRepository;
     private final ProductCatalog productCatalog;
@@ -30,16 +28,11 @@ public class OrderCreationUseCase {
                 throw new UnknownProductException();
             }
             else {
-                final BigDecimal taxedAmount = product.taxedAmount().multiply(BigDecimal.valueOf(itemRequest.getQuantity())).setScale(2, HALF_UP);
-                final BigDecimal taxAmount = product.tax().multiply(BigDecimal.valueOf(itemRequest.getQuantity()));
-
                 final OrderItem orderItem = new OrderItem(
                         product,
-                        itemRequest.getQuantity(),
-                        taxedAmount,
-                        taxAmount
+                        itemRequest.getQuantity()
                 );
-                trucs.add(new Truc(orderItem, taxedAmount, taxAmount));
+                trucs.add(new Truc(orderItem, orderItem.getTaxedAmount(), orderItem.getTax()));
             }
         }
 
