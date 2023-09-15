@@ -6,7 +6,6 @@ import it.gabrieletondi.telldontaskkata.domain.Product;
 import it.gabrieletondi.telldontaskkata.repository.OrderRepository;
 import it.gabrieletondi.telldontaskkata.repository.ProductCatalog;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class OrderCreationUseCase {
@@ -19,7 +18,7 @@ public class OrderCreationUseCase {
     }
 
     public void run(SellItemsRequest request) {
-        var trucs = new ArrayList<Truc>();
+        var items = new ArrayList<OrderItem>();
 
         for (SellItemRequest itemRequest : request.getRequests()) {
             Product product = productCatalog.getByName(itemRequest.getProductName());
@@ -32,16 +31,12 @@ public class OrderCreationUseCase {
                         product,
                         itemRequest.getQuantity()
                 );
-                trucs.add(new Truc(orderItem, orderItem.getTaxedAmount(), orderItem.getTax()));
+                items.add(orderItem);
             }
         }
 
-        var order = Order.create(trucs, "EUR", 0);
+        var order = Order.create(items, "EUR", 0);
 
         orderRepository.save(order);
-    }
-
-    public record Truc(OrderItem items, BigDecimal taxedAmount, BigDecimal taxAmount) {
-
     }
 }

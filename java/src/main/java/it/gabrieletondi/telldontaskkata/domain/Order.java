@@ -1,9 +1,6 @@
 package it.gabrieletondi.telldontaskkata.domain;
 
-import it.gabrieletondi.telldontaskkata.useCase.OrderCreationUseCase;
-
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
@@ -23,10 +20,9 @@ public class Order {
         this.id = id;
     }
 
-    public static Order create(ArrayList<OrderCreationUseCase.Truc> trucs, String currency, int id) {
-        List<OrderItem> items = trucs.stream().map(OrderCreationUseCase.Truc::items).toList();
-        BigDecimal total = trucs.stream().map(OrderCreationUseCase.Truc::taxedAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal tax = trucs.stream().map(OrderCreationUseCase.Truc::taxAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+    public static Order create(List<OrderItem> items, String currency, int id) {
+        BigDecimal total = items.stream().map(OrderItem::getTaxedAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal tax = items.stream().map(OrderItem::getTax).reduce(BigDecimal.ZERO, BigDecimal::add);
         return new Order(
                 total,
                 currency,
